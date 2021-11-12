@@ -28,6 +28,14 @@ async function run() {
 			res.send(products);
 		});
 
+		// GET API All Orders Collection
+		app.get('/allOrders', async (req, res) => {
+
+			const cursor = allOrdersCollection.find({});
+			const orders = await cursor.toArray();
+			res.send(orders);
+		});
+
 		// POST API All Orders Collection
 		app.post('/allOrders', async (req, res) => {
 			const newOrder = req.body;
