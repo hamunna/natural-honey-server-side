@@ -16,6 +16,7 @@ async function run() {
 		await client.connect();
 		const database = client.db('naturalHoneydb');
 		const productsCollection = database.collection('products');
+		const allOrdersCollection = database.collection("allOrders");
 
 		// GET API
 		app.get('/products', async (req, res) => {
@@ -24,6 +25,14 @@ async function run() {
 			const products = await cursor.toArray();
 			console.log(products);
 			res.send(products);
+		});
+
+		// POST API Placing Order
+		app.post('/allOrders', async (req, res) => {
+			const newOrder = req.body;
+			const result = await allOrdersCollection.insertOne(newOrder);
+
+			res.json(result);
 		});
 
 	}
