@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const { MongoClient } = require('mongodb');
 require('dotenv').config()
+const ObjectId = require('mongodb').ObjectId;
 const port = process.env.PORT || 5000
 
 app.use(cors());
@@ -108,6 +109,18 @@ async function run() {
 			const filter = { email: user.email };
 			const updateDoc = { $set: { role: 'admin' } };
 			const result = await usersCollection.updateOne(filter, updateDoc);
+			res.json(result);
+		});
+
+		//===================================
+		// DELETE API
+		//===================================
+		// DELETE User (API)
+		app.delete('/allOrders/:id', async (req, res) => {
+			const id = req.params.id;
+			const query = { _id: ObjectId(id) };
+			const result = await allOrdersCollection.deleteOne(query);
+
 			res.json(result);
 		});
 	}
