@@ -54,6 +54,18 @@ async function run() {
 			res.json(reviews);
 		});
 
+		// GET API Checking isAdmin
+		app.get('/users/:email', async (req, res) => {
+			const email = req.params.email;
+			const query = { email: email };
+			const user = await usersCollection.findOne(query);
+			let isAdmin = false;
+			if (user?.role === 'admin') {
+				isAdmin = true;
+			}
+			res.json({ admin: isAdmin });
+		});
+
 		// POST API All Orders Collection
 		app.post('/allOrders', async (req, res) => {
 			const newOrder = req.body;
