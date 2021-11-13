@@ -28,6 +28,17 @@ async function run() {
 			res.json(products);
 		});
 
+		
+		// GET API All Orders Collection
+		app.get('/allOrders/list', async (req, res) => {
+
+			const list = req.query.list;
+			const query = { list: list }
+			const cursor = allOrdersCollection.find(query);
+			const orders = await cursor.toArray();
+			res.json(orders);
+		});
+
 		// GET API Orders Collection by Email
 		app.get('/allOrders', async (req, res) => {
 			const email = req.query.userEmail;
@@ -36,15 +47,6 @@ async function run() {
 			const orders = await cursor.toArray();
 			res.json(orders);
 		});
-
-		// GET API All Orders Collection
-		app.get('/allOrders', async (req, res) => {
-
-			const cursor = allOrdersCollection.find({});
-			const orders = await cursor.toArray();
-			res.json(orders);
-		});
-
 
 		// GET API Reviews Collection
 		app.get('/reviews', async (req, res) => {
