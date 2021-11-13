@@ -25,7 +25,6 @@ async function run() {
 
 			const cursor = productsCollection.find({});
 			const products = await cursor.toArray();
-			console.log(products);
 			res.json(products);
 		});
 
@@ -33,7 +32,6 @@ async function run() {
 		app.get('/allOrders', async (req, res) => {
 			const email = req.query.userEmail;
 			const query = { userEmail: email }
-			console.log(query);
 			const cursor = allOrdersCollection.find(query);
 			const orders = await cursor.toArray();
 			res.json(orders);
@@ -88,8 +86,16 @@ async function run() {
 			const updateDoc = { $set: user };
 			const result = await usersCollection.updateOne(filter, updateDoc, options);
 			res.json(result);
-		})
+		});
 
+		// PUT API Update User to an Admin
+		app.put('/users/admin', async (req, res) => {
+			const user = req.body;
+			const filter = { email: user.email };
+			const updateDoc = { $set: { role: 'admin' } };
+			const result = await usersCollection.updateOne(filter, updateDoc);
+			res.json(result);
+		});
 	}
 	finally {
 		// await client.close();
