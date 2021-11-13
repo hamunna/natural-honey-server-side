@@ -18,6 +18,7 @@ async function run() {
 		const productsCollection = database.collection('products');
 		const allOrdersCollection = database.collection("allOrders");
 		const reviewsCollection = database.collection("reviews");
+		const usersCollection = database.collection("users");
 
 		// GET API
 		app.get('/products', async (req, res) => {
@@ -25,7 +26,17 @@ async function run() {
 			const cursor = productsCollection.find({});
 			const products = await cursor.toArray();
 			console.log(products);
-			res.send(products);
+			res.json(products);
+		});
+
+		// GET API Orders Collection by Email
+		app.get('/allOrders', async (req, res) => {
+			const email = req.query.userEmail;
+			const query = { userEmail: email }
+			console.log(query);
+			const cursor = allOrdersCollection.find(query);
+			const orders = await cursor.toArray();
+			res.json(orders);
 		});
 
 		// GET API All Orders Collection
@@ -33,7 +44,16 @@ async function run() {
 
 			const cursor = allOrdersCollection.find({});
 			const orders = await cursor.toArray();
-			res.send(orders);
+			res.json(orders);
+		});
+
+
+		// GET API Reviews Collection
+		app.get('/reviews', async (req, res) => {
+
+			const cursor = reviewsCollection.find({});
+			const reviews = await cursor.toArray();
+			res.json(reviews);
 		});
 
 		// POST API All Orders Collection
@@ -51,6 +71,24 @@ async function run() {
 
 			res.json(result);
 		});
+
+		// POST API Users Collection
+		app.post('/users', async (req, res) => {
+			const newUser = req.body;
+			const result = await usersCollection.insertOne(newUser);
+
+			res.json(result);
+		});
+
+		// PUT API upsert Users Collection
+		app.put('/users', async (req, res) => {
+			const user = req.body;
+			const filter = { email: user.email };
+			const options = { upsert: true };
+			const updateDoc = { $set: user };
+			const result = await usersCollection.updateOne(filter, updateDoc, options);
+			res.json(result);
+		})
 
 	}
 	finally {
