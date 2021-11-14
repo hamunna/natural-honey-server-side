@@ -112,6 +112,20 @@ async function run() {
 			res.json(result);
 		});
 
+		// PUT API Update Order Pending to Complete 
+		app.put('/allOrders/:id', async (req, res) => {
+			const id = req.params.id;
+			const updatedOrder = req.body;
+			const filter = { _id: ObjectId(id) };
+			// const options = { upsert: true };
+			const updateDoc = { $set: { 
+				status: 'Complete'
+			}
+			};
+			const result = await allOrdersCollection.updateOne(filter, updateDoc);
+			res.send(result);
+		});
+
 		//===================================
 		// DELETE API
 		//===================================
