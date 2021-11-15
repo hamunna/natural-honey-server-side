@@ -21,6 +21,10 @@ async function run() {
 		const reviewsCollection = database.collection("reviews");
 		const usersCollection = database.collection("users");
 
+
+		//==========================================================================
+		// GET API
+		//==========================================================================
 		// GET API
 		app.get('/products', async (req, res) => {
 
@@ -69,6 +73,10 @@ async function run() {
 			res.json({ admin: isAdmin });
 		});
 
+
+		//==========================================================================
+		// POST API
+		//==========================================================================
 		// POST API All Orders Collection
 		app.post('/allOrders', async (req, res) => {
 			const newOrder = req.body;
@@ -85,6 +93,14 @@ async function run() {
 			res.json(result);
 		});
 
+		// POST API Products Collection
+		app.post('/products', async (req, res) => {
+			const newProduct = req.body;
+			const result = await productsCollection.insertOne(newProduct);
+
+			res.json(result);
+		});
+
 		// POST API Users Collection
 		app.post('/users', async (req, res) => {
 			const newUser = req.body;
@@ -92,6 +108,11 @@ async function run() {
 
 			res.json(result);
 		});
+
+
+		//==========================================================================
+		// PUT API
+		//==========================================================================
 
 		// PUT API upsert Users Collection
 		app.put('/users', async (req, res) => {
@@ -126,9 +147,10 @@ async function run() {
 			res.send(result);
 		});
 
-		//===================================
+
+		//==========================================================================
 		// DELETE API
-		//===================================
+		//==========================================================================
 		// DELETE User (API)
 		app.delete('/allOrders/:id', async (req, res) => {
 			const id = req.params.id;
